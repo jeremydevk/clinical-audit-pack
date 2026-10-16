@@ -116,8 +116,9 @@ def build_command(seeds_dir: Path, epochs: int) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pilot", action="store_true", help="R6 pilot per PREREG.md")
+    parser.add_argument("--pilot", action="store_true", help="pilot per PREREG.md")
     parser.add_argument("--reps", type=int, help="override reps per seed per arm")
+    parser.add_argument("--seeds", help="comma-separated seed stems (default: all)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -129,6 +130,13 @@ def main() -> int:
     reps = args.reps or cfg["sampling"]["pilot_reps"]
     arms = load_arms()
     seed_files = [f for d in SEED_DIRS for f in sorted(d.glob("*.md"))]
+    if args.seeds:
+        wanted = {s.strip() for s in args.seeds.split(",")}
+        seed_files = [f for f in seed_files if f.stem in wanted]
+        missing = wanted - {f.stem for f in seed_files}
+        if missing:
+            print(f"refusing: unknown seeds {sorted(missing)}")
+            return 1
     stems = [f.stem for f in seed_files]
     if len(set(stems)) != len(stems):
         print("refusing: duplicate seed stems across seed directories")

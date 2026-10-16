@@ -1,0 +1,12 @@
+# secrets stay out of the repo
+.env
+
+# run artifacts regenerated from logs
+gap_report.json
+topup_manifest.json
+
+# python
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc

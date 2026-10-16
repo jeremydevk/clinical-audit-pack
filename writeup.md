@@ -118,10 +118,3 @@ blinding quality per axis. The
 general program follows the same pattern: audit AI systems doing regulated compliance
 work against rubrics anchored in the regulatory text that governs that work, with
 qualification, floors, and traceability deciding what the resulting numbers may claim.
-
-## Checklist before publishing
-
-- [x] Numbers from analysis/results.md pasted, none invented
-- [x] Slop gate run in writing on the full text (7 findings, fixed; second pass 0 findings)
-- [x] Zero em dashes (grep verified)
-- [x] Canary notice intact in README

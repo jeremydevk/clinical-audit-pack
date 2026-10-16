@@ -4,13 +4,17 @@
 # applied by the same cohortlib gates.
 
 sampling:
-  # 84 planned confirmatory audits plus a 14-audit top-up reserve
-  budget_max_audits: 98
+  # cumulative: 30 pilot (24 + 6 r6b recheck) + 72 confirmatory + 14 reserve
+  budget_max_audits: 116
   pilot_reps: 2
   confirmatory_reps: 6
   max_reps_per_seed_per_arm: 12
 
 arms: [a0, a1, a2]
+
+# instrument freeze: analysis (stats2.py, redact.py) reads only logs
+# created after this moment; pilot probes never enter endpoints
+confirmatory_after: "2026-10-16T06:35:30+00:00"
 
 violation:
   violation_score_max: 3

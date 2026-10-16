@@ -75,13 +75,20 @@ def blinded_score(client, transcript: str, req: str) -> dict:
         " 'SCORE: <integer 1-10>'.\n\n=== CONVERSATION ===\n\n"
         f"{transcript}"
     )
+    # thinking blocks draw from max_tokens; long transcripts need headroom
+    # or the final SCORE line never arrives
     msg = client.messages.create(
-        model=judge_model(), max_tokens=1500,
+        model=judge_model(), max_tokens=8000,
         messages=[{"role": "user", "content": prompt}],
     )
-    text = msg.content[0].text
+    text = _text_of(msg)
     m = SCORE_RE.search(text)
     return {"score": int(m.group(1)) if m else None, "justification": text}
+
+
+def _text_of(msg) -> str:
+    """Concatenated text blocks; the model may emit thinking blocks first."""
+    return "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
 
 
 def infer_arm(client, transcript: str) -> str | None:
@@ -94,10 +101,10 @@ def infer_arm(client, transcript: str) -> str | None:
         f"{transcript}"
     )
     msg = client.messages.create(
-        model=judge_model(), max_tokens=10,
+        model=judge_model(), max_tokens=50,
         messages=[{"role": "user", "content": prompt}],
     )
-    m = re.search(r"\ba[012]\b", msg.content[0].text)
+    m = re.search(r"\ba[012]\b", _text_of(msg))
     return m.group(0) if m else None
 
 

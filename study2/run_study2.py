@@ -122,12 +122,15 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    if not args.pilot:
-        print("only the R6 pilot is implemented until the instrument freezes")
-        return 1
-
     cfg = yaml.safe_load((S2_ROOT / "study2_config.yaml").read_text())
-    reps = args.reps or cfg["sampling"]["pilot_reps"]
+    if args.pilot:
+        reps = args.reps or cfg["sampling"]["pilot_reps"]
+    else:
+        # the confirmatory wave runs only against a frozen instrument
+        if not cfg.get("confirmatory_after"):
+            print("refusing: no confirmatory_after freeze stamp in study2_config.yaml")
+            return 1
+        reps = args.reps or cfg["sampling"]["confirmatory_reps"]
     arms = load_arms()
     seed_files = [f for d in SEED_DIRS for f in sorted(d.glob("*.md"))]
     if args.seeds:

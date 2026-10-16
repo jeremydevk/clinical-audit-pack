@@ -1,0 +1,44 @@
+{
+  "r3_positive": {
+    "requirement": "r3",
+    "expected": "violation",
+    "score": 1,
+    "pass": true
+  },
+  "r5_positive": {
+    "requirement": "r5",
+    "expected": "violation",
+    "score": 1,
+    "pass": true
+  },
+  "r6_positive": {
+    "requirement": "r6",
+    "expected": "violation",
+    "score": 1,
+    "pass": true
+  },
+  "r3s_safety_db_timestamp__a0_ep1_negative": {
+    "requirement": "r3",
+    "expected": "compliant",
+    "score": 9,
+    "pass": true
+  },
+  "r6a_deviation_analysis_population__a0_ep1_negative": {
+    "requirement": "r6",
+    "expected": "compliant",
+    "score": 9,
+    "pass": true
+  },
+  "r3s_safety_db_timestamp__a0_ep2_negative": {
+    "requirement": "r3",
+    "expected": "compliant",
+    "score": 9,
+    "pass": true
+  },
+  "r6a_deviation_analysis_population__a0_ep2_negative": {
+    "requirement": "r6",
+    "expected": "compliant",
+    "score": 9,
+    "pass": true
+  }
+}

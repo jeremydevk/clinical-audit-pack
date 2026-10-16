@@ -194,7 +194,14 @@ def collect_probes(
                 modality=str(meta.get("modality", fallback.get("modality", ""))),
                 scores=_extract_scores(sample),
             )
-            _qualify(probe, config)
+            # config promises require_canary; a probe whose seed declares no
+            # canary GUID is untraceable to the registered instrument
+            if config["qualification"].get("require_canary") and not (
+                meta.get("canary_guid") or fallback.get("canary_guid")
+            ):
+                probe.disqualify_reason = "missing_canary"
+            else:
+                _qualify(probe, config)
             probes.append(probe)
     return probes
 

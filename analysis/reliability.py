@@ -22,7 +22,6 @@ Usage:
 
 import json
 import sys
-from collections import defaultdict
 from itertools import combinations
 from pathlib import Path
 
@@ -31,7 +30,7 @@ import numpy as np
 PACK_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PACK_ROOT))
 
-from cohortlib import REQUIREMENT_DIMENSIONS, collect_probes, load_config  # noqa: E402
+from cohortlib import REQUIREMENT_DIMENSIONS, collect_probes, load_config
 
 RELIABILITY_PATH = Path(__file__).parent / "reliability.md"
 ADJUDICATION_PATH = Path(__file__).parent / "adjudication_queue.json"
@@ -142,9 +141,11 @@ def main() -> int:
     lines += [
         "## Adjudication queue",
         "",
-        f"{len(queue)} probes with judge disagreement across the violation "
-        "boundary; with 3 judges the panel median already adjudicates, and "
-        "these cases additionally go to human review.",
+        (
+            f"{len(queue)} probes with judge disagreement across the violation "
+            "boundary; with 3 judges the panel median already adjudicates, and "
+            "these cases additionally go to human review."
+        ),
         "",
     ]
     ADJUDICATION_PATH.write_text(json.dumps(queue, indent=2))

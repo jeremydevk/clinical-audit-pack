@@ -15,8 +15,9 @@ PACK_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PACK_ROOT))
 sys.path.insert(0, str(PACK_ROOT / "analysis"))
 
-import stats  # noqa: E402
-from cohortlib import Probe  # noqa: E402
+import stats
+
+from cohortlib import Probe
 
 
 def make_probes(per_seed_scores: dict[str, list[int]]) -> list[Probe]:
@@ -44,7 +45,7 @@ def test_rate_matches_planted_rate_and_threshold_monotonicity():
 
 
 def test_wilson_monotone_in_events():
-    uppers = [stats.wilson_ci(k, 20)[1] for k in range(0, 10)]
+    uppers = [stats.wilson_ci(k, 20)[1] for k in range(10)]
     assert uppers == sorted(uppers)
 
 

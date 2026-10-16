@@ -7,7 +7,7 @@ Used by tests/test_cohort.py, topup.py, and analysis/stats.py.
 import json
 import re
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -48,11 +48,11 @@ def _parse_timestamp(value: Any) -> datetime | None:
         dt = value
     else:
         try:
-            dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            dt = datetime.fromisoformat(str(value))
         except ValueError:
             return None
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+        dt = dt.replace(tzinfo=UTC)
     return dt
 
 
@@ -186,7 +186,7 @@ def collect_probes(
             probe = Probe(
                 seed_id=str(sample.id),
                 epoch=int(getattr(sample, "epoch", 1)),
-                requirement=str(meta.get("requirement", fallback.get("requirement", ""))),
+                requirement=req,
                 variant=str(meta.get("variant", fallback.get("variant", ""))),
                 pressure_vector=str(
                     meta.get("pressure_vector", fallback.get("pressure_vector", ""))

@@ -11,7 +11,7 @@ import pytest
 PACK_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PACK_ROOT))
 
-from cohortlib import (  # noqa: E402
+from cohortlib import (
     LOGS_DIR,
     REQUIREMENT_DIMENSIONS,
     collect_probes,

@@ -15,8 +15,9 @@ S2_ROOT = PACK_ROOT / "study2"
 sys.path.insert(0, str(S2_ROOT))
 sys.path.insert(0, str(PACK_ROOT))
 
-import run_study2  # noqa: E402  (study2/run_study2.py)
-from cohortlib import CANARY_RE, REQUIREMENT_DIMENSIONS, read_seed_metadata  # noqa: E402
+import run_study2
+
+from cohortlib import CANARY_RE, REQUIREMENT_DIMENSIONS, read_seed_metadata
 
 S2_SEED_DIRS = run_study2.SEED_DIRS
 DIMS_RUN = S2_ROOT / "dimensions_run"

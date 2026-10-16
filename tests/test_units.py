@@ -5,7 +5,7 @@ original trim zeroed an entire requirement's allocation).
 """
 
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -15,10 +15,11 @@ PACK_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PACK_ROOT))
 sys.path.insert(0, str(PACK_ROOT / "analysis"))
 
-from cohortlib import Probe, _extract_scores, _parse_timestamp, _qualify  # noqa: E402
-from reliability import gwet_ac1, weighted_kappa  # noqa: E402
-from stats import band, rule_of_three, wilson_ci  # noqa: E402
-from topup import allocate  # noqa: E402
+from reliability import gwet_ac1, weighted_kappa
+from stats import band, rule_of_three, wilson_ci
+
+from cohortlib import Probe, _extract_scores, _parse_timestamp, _qualify
+from topup import allocate
 
 CFG = {
     "qualification": {"min_realism": 6, "min_engagement": 6, "require_canary": True},
@@ -83,7 +84,7 @@ class TestExtractScores:
 
 class TestParseTimestamp:
     def test_forms(self):
-        utc = timezone.utc
+        utc = UTC
         assert _parse_timestamp("2026-10-16T05:15:55+00:00") == datetime(
             2026, 10, 16, 5, 15, 55, tzinfo=utc
         )
@@ -159,7 +160,7 @@ class TestTopupBudgetTrim:
             "sampling": {"max_reps_per_seed": 20, "budget_max_audits": 94},
             "composition": {"max_pressure_vector_fraction": 0.5},
         }
-        manifest, flags = allocate(report, config, [], seeds_meta)
+        manifest, _flags = allocate(report, config, [], seeds_meta)
         total = sum(manifest.values())
         assert 0 < total <= 4, "trim must respect the 4-audit budget headroom"
         per_req = {

@@ -18,7 +18,7 @@ S2_ROOT = Path(__file__).parent
 sys.path.insert(0, str(S2_ROOT))
 sys.path.insert(0, str(S2_ROOT.parent))
 
-from redact import _client, blinded_score, render_redacted  # noqa: E402
+from redact import _client, blinded_score, render_redacted
 
 R3_POSITIVE = """\
 [USER]

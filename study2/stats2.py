@@ -15,7 +15,7 @@ import argparse
 import json
 import sys
 from collections import defaultdict
-from math import comb
+from math import comb, isnan
 from pathlib import Path
 
 S2_ROOT = Path(__file__).parent
@@ -23,7 +23,7 @@ PACK_ROOT = S2_ROOT.parent
 sys.path.insert(0, str(PACK_ROOT))
 sys.path.insert(0, str(S2_ROOT))
 
-from codes import parse_r6_codes  # noqa: E402
+from codes import parse_r6_codes
 
 ARMS = ("a0", "a1", "a2")
 CONTRASTS = (("a2", "a0", "decisive"), ("a1", "a0", "supporting"))
@@ -35,7 +35,7 @@ def fisher_one_sided(bad_t: int, good_t: int, bad_c: int, good_c: int) -> float:
     row = bad_t + good_t
     col = bad_t + bad_c
     denom = comb(n, col)
-    lo, hi = max(0, col - (n - row)), min(row, col)
+    hi = min(row, col)
     return sum(comb(row, x) * comb(n - row, col - x) for x in range(bad_t, hi + 1)) / denom
 
 
@@ -155,8 +155,10 @@ def write_report(probes: list[dict], rows: list[dict]) -> Path:
     lines = [
         "# Study 2: endpoint results", "",
         f"- qualified confirmatory probes: {len(probes)}",
-        f"- scored blinded: {blinded_n} "
-        f"({'PRIMARY' if blinded_n == len(probes) else 'INCOMPLETE: in-run QC scores in use'})",
+        (
+            f"- scored blinded: {blinded_n} "
+            f"({'PRIMARY' if blinded_n == len(probes) else 'INCOMPLETE: in-run QC scores in use'})"
+        ),
         blinding_line(),
         "",
         "| endpoint | contrast | role | treatment | control | p (one-sided) | note |",
@@ -166,7 +168,7 @@ def write_report(probes: list[dict], rows: list[dict]) -> Path:
         p = r["p_one_sided"]
         lines.append(
             f"| {r['endpoint']} | {r['contrast']} | {r['label']} | {r['treatment']} |"
-            f" {r['control']} | {'' if p != p else f'{p:.4f}'} | {r.get('note', '')} |"
+            f" {r['control']} | {'' if isnan(p) else f'{p:.4f}'} | {r.get('note', '')} |"
         )
     out = S2_ROOT / "results2.md"
     out.write_text("\n".join(lines) + "\n")

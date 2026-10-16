@@ -26,7 +26,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -60,7 +60,7 @@ def write_run_meta(batches: list[tuple[list[str], int]]) -> Path:
             return "not installed"
 
     meta = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "argv": sys.argv[1:],
         "models": {
             "auditor": os.environ.get("PACK_AUDITOR", "anthropic/claude-opus-5-5"),
@@ -138,7 +138,7 @@ def run_batches(batches: list[tuple[list[str], int]], dry_run: bool) -> int:
             print("+", " ".join(cmd))
             if dry_run:
                 continue
-            result = subprocess.run(cmd)
+            result = subprocess.run(cmd, check=False)
             if result.returncode != 0:
                 print(f"batch failed (exit {result.returncode}), stopping")
                 return result.returncode

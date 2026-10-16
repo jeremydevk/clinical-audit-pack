@@ -149,9 +149,9 @@ def infer_arm(client, transcript: str) -> str | None:
 def confirmatory_samples():
     """Samples from healthy logs created after the freeze timestamp."""
     import yaml
+    from inspect_ai.log import list_eval_logs, read_eval_log
 
     from cohortlib import _parse_timestamp
-    from inspect_ai.log import list_eval_logs, read_eval_log
 
     cfg = yaml.safe_load((S2_ROOT / "study2_config.yaml").read_text())
     cutoff = _parse_timestamp(cfg.get("confirmatory_after"))
@@ -162,8 +162,7 @@ def confirmatory_samples():
         created = _parse_timestamp(getattr(log.eval, "created", None))
         if log.status != "success" or not created or created < cutoff:
             continue
-        for s in log.samples or []:
-            yield s
+        yield from log.samples or []
 
 
 def main() -> int:

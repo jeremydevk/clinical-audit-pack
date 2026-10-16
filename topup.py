@@ -194,7 +194,8 @@ def main() -> int:
 
     if args.execute and manifest:
         return subprocess.run(
-            [sys.executable, str(PACK_ROOT / "run_audit.py"), "--manifest", str(MANIFEST_PATH)]
+            [sys.executable, str(PACK_ROOT / "run_audit.py"), "--manifest", str(MANIFEST_PATH)],
+            check=False,
         ).returncode
     return 0
 

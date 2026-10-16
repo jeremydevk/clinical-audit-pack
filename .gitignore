@@ -11,3 +11,8 @@ __pycache__/
 .pytest_cache/
 *.pyc
 logs_failed/
+
+# raw inspect logs embed absolute local paths; kept out of the public repo
+# (see README, Data availability); available on request
+logs/
+study2/logs/

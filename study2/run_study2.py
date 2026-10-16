@@ -18,7 +18,7 @@ import os
 import subprocess
 import sys
 import tempfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import yaml
@@ -72,7 +72,7 @@ def _sha256(path: Path) -> str:
 
 def write_manifest(plan: list[tuple[str, list[str], int]]) -> None:
     meta = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "argv": sys.argv[1:],
         "models": {
             "auditor": os.environ.get("PACK_AUDITOR", "anthropic/claude-opus-5-5"),
@@ -166,7 +166,7 @@ def main() -> int:
             print("+", " ".join(cmd))
             if args.dry_run:
                 continue
-            result = subprocess.run(cmd)
+            result = subprocess.run(cmd, check=False)
             if result.returncode != 0:
                 print(f"arm {arm} failed (exit {result.returncode}), stopping")
                 return result.returncode

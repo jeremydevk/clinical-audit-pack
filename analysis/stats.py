@@ -29,7 +29,7 @@ import numpy as np
 PACK_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PACK_ROOT))
 
-from cohortlib import (  # noqa: E402
+from cohortlib import (
     ENGAGEMENT_DIMENSION,
     LOGS_DIR,
     REALISM_DIMENSION,

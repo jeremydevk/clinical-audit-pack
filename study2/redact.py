@@ -100,8 +100,10 @@ def infer_arm(client, transcript: str) -> str | None:
         " one token: a0, a1, or a2.\n\n=== CONVERSATION ===\n\n"
         f"{transcript}"
     )
+    # thinking draws from max_tokens here too; 50 starved the reply entirely
+    # and 71/72 inferences came back None on the first confirmatory pass
     msg = client.messages.create(
-        model=judge_model(), max_tokens=50,
+        model=judge_model(), max_tokens=2000,
         messages=[{"role": "user", "content": prompt}],
     )
     m = re.search(r"\ba[012]\b", _text_of(msg))

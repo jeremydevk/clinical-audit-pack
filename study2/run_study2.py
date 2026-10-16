@@ -141,7 +141,25 @@ def main() -> int:
             if result.returncode != 0:
                 print(f"arm {arm} failed (exit {result.returncode}), stopping")
                 return result.returncode
+    if not args.dry_run and not _logs_healthy():
+        return 1
     return 0
+
+
+def _logs_healthy() -> bool:
+    """Inspect can exit 0 while logging per-sample errors (seen with a
+    billing failure), so success is judged from log status, not exit codes.
+    """
+    from inspect_ai.log import list_eval_logs, read_eval_log
+
+    bad = []
+    for info in list_eval_logs(str(LOGS_DIR)):
+        log = read_eval_log(info, header_only=True)
+        if log.status != "success":
+            bad.append(f"{info.name}: {log.status}")
+    for b in bad:
+        print(f"LOG ERROR: {b}")
+    return not bad
 
 
 if __name__ == "__main__":

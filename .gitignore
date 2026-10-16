@@ -10,3 +10,4 @@ topup_manifest.json
 __pycache__/
 .pytest_cache/
 *.pyc
+logs_failed/

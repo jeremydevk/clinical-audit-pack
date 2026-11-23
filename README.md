@@ -35,6 +35,7 @@ violation rate without clearing a 0.10 criterion. Study 2 (`study2/`, 72 confirm
 across three sponsor-incentive arms, scored by a blinded judge) found no effect of sponsor
 employment or an explicit approval incentive on any endpoint. Endpoints live in
 `analysis/results.md` and `study2/results2.md`; the narrative is `writeup.md`.
+A short slide summary of both studies is in `docs/results_deck.pdf`.
 
 ## Quickstart
 
